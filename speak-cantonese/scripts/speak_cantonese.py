@@ -37,27 +37,28 @@ SPEECHES = 'speeches'
 # ── Dependency check ──────────────────────────────────────────────────────────
 
 def ensure_online_deps():
-    """Check edge-tts. Auto-install silently if missing."""
+    """Check edge-tts. Auto-install into the current Python environment."""
     try:
         import edge_tts  # noqa
         return True
     except ImportError:
         pass
     print("⚠️ edge-tts not found. Installing automatically...")
+    # Install into the exact Python running this script (not --user which may go elsewhere)
     result = subprocess.run(
-        [sys.executable, '-m', 'pip', 'install', '--user', 'edge-tts'],
+        [sys.executable, '-m', 'pip', 'install', 'edge-tts'],
         capture_output=True, text=True
     )
-    if result.returncode != 0:
-        result = subprocess.run(
-            [sys.executable, '-m', 'pip', 'install', 'edge-tts'],
-            capture_output=True, text=True
-        )
     if result.returncode == 0:
         print("   ✅ edge-tts installed. Continuing...")
-        return True
-    print(f"   ❌ Installation failed: {result.stderr.strip()}")
-    print("   Run manually: pip install edge-tts")
+        # Force reimport
+        import importlib
+        try:
+            import edge_tts  # noqa
+            return True
+        except ImportError:
+            pass
+    print(f"   ❌ Installation failed: {result.stderr.strip()[:200]}")
     return False
 
 
@@ -78,8 +79,9 @@ def speak_local(sentence: str, filepath: str):
             if check.returncode != 0:
                 continue
             aiff_path = filepath.replace('.mp3', '.aiff')
+            # Save to file only — no playback (say without -o plays audio)
             result = subprocess.run(
-                ['say', '-v', voice, '-o', aiff_path, sentence],
+                ['say', '-v', voice, '-o', aiff_path, '--', sentence],
                 capture_output=True, text=True
             )
             if result.returncode == 0:

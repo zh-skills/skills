@@ -1,56 +1,57 @@
 ---
 name: speak-cantonese
-description: Speak a Cantonese sentence aloud using text-to-speech and save the audio to an mp3 file. Use ONLY when the user explicitly says "use skill speak-cantonese" followed by a Cantonese sentence. Saves the audio to speeches/ folder with a filename based on the date and time.
+description: Speak a Cantonese sentence aloud using text-to-speech. Use ONLY when the user explicitly says "use skill speak-cantonese" followed by a Cantonese sentence. The script speaks the audio directly — do NOT search for or expect any mp3 file to be saved.
 ---
 
 # Speak Cantonese
 
 > 中文版本：[SKILL.zh.md](SKILL.zh.md)
 
-Convert a Cantonese sentence to speech using edge-tts and save the audio as an mp3 file.
+Speak a Cantonese sentence aloud using edge-tts (online) or macOS system voice (local).
 
 ## Workflow
 
 1. Extract the sentence from the user's message (everything after "use skill speak-cantonese")
-2. Run `scripts/speak_cantonese.py {sentence}` to synthesise and play the audio
-3. The script saves the audio to `speeches/` folder named by date and time
-4. Present the saved filename to the user
+2. Run `scripts/speak_cantonese.py {sentence}` — the script speaks the audio and exits
+3. Report the result to the user
+4. Do NOT search for mp3 files. Do NOT retry. The task is complete when the script exits.
 
 ## Trigger Examples
 
 - `use skill speak-cantonese 各個國家有各個國家嘅國歌` — default (online, edge-tts)
 - `use skill speak-cantonese online 各個國家有各個國家嘅國歌` — explicitly use edge-tts
-- `use skill speak-cantonese local 各個國家有各個國家嘅國歌` — use system voice (macOS/Windows)
-- `use skill speak-cantonese file skills/speak-cantonese/assets/cantonese-challenge-1.txt` — speak a file line by line
+- `use skill speak-cantonese local 各個國家有各個國家嘅國歌` — use macOS system voice (Sinji)
 
 ## Modes
 
 - `online` (default) — uses edge-tts (Microsoft zh-HK-HiuMaanNeural, free, requires internet)
-- `local` — uses macOS `say` command (Sin-ji voice) or Windows pyttsx3
+- `local` — uses macOS `say` command with Sinji (Cantonese HK) voice
 - If the chosen mode fails, automatically falls back to the other mode
-- Always reports which method was used
 
 ## Output Format
 
 ```
-🔊 Speaking: {sentence}
-   Using: {method}
-
-[Saved to speeches/cantonese_{YYYYMMDD_HHMMSS}.mp3]
+🔊 Spoke (online): {sentence}
+```
+or
+```
+🔊 Spoke (local, Sinji): {sentence}
 ```
 
 ## Important
 
-Run `scripts/speak_cantonese.py` only once per request. Each run saves exactly one `.mp3` file. The script does NOT play audio — it saves the file only. Do NOT retry if no audio is heard. Check for the saved `.mp3` file in `speeches/` to confirm success.
+- Run `scripts/speak_cantonese.py` only once per request
+- The script plays audio directly and exits — no mp3 file is saved
+- Do NOT search for mp3 files after running
+- Do NOT retry if the script exits with code 0
 
 ## Setup
 
 ```bash
-pip install edge-tts pygame    # for online mode (default)
-pip install pyttsx3            # for local mode on Windows
+pip install edge-tts    # for online mode (default, auto-installed if missing)
 ```
 
-macOS local mode uses the built-in `say` command — no install needed. Install the Sin-ji (Cantonese HK) voice in System Settings → Accessibility → Spoken Content.
+macOS local mode uses the built-in `say` command — no install needed. Install Sinji (Cantonese HK) voice in System Settings → Accessibility → Spoken Content.
 
 ## Reference
 

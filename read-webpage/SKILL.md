@@ -36,6 +36,6 @@ If the page cannot be reached, report the HTTP error clearly.
 
 ## Important
 
-Run `scripts/read_webpage.py` only once per request. Each run saves exactly one `.txt` file. If multiple files exist for the same page, keep only the latest one.
+Run `scripts/read_webpage.py` only once per request. Each run saves exactly one `.txt` file. Before retrying, check whether a `.txt` file was already saved — if it was, the run succeeded and no retry is needed.
 
 For full implementation details and API endpoint usage, see [references/api_reference.md](references/api_reference.md).

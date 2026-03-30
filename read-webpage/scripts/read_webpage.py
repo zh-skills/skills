@@ -46,18 +46,28 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
     full_text = '\n'.join(lines)
     preview = full_text[:max_chars]
 
-    # Save full text to file
+    # Save full text to file, retry once on write error
     filename = make_filename(url)
     filepath = os.path.join(save_dir, filename)
-    with open(filepath, 'w', encoding='utf-8') as f:
-        f.write(f"URL: {url}\n")
-        f.write(f"Fetched: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Lines: {len(lines)}\n")
-        f.write('─' * 60 + '\n\n')
-        f.write(full_text)
+    for attempt in range(2):
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(f"URL: {url}\n")
+                f.write(f"Fetched: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"Lines: {len(lines)}\n")
+                f.write('─' * 60 + '\n\n')
+                f.write(full_text)
+            break  # success — do not retry
+        except OSError as e:
+            if attempt == 0:
+                print(f"⚠️ Write error (attempt 1): {e} — retrying...")
+            else:
+                print(f"❌ Write failed after retry: {e}")
+                filename = None
 
+    saved_msg = f"Saved to {filename}" if filename else "File save failed"
     return (f"📄 Preview of {url}\n\n{preview}\n\n"
-            f"[Fetched {len(lines)} lines of text • Saved to {filename}]")
+            f"[Fetched {len(lines)} lines of text • {saved_msg}]")
 
 
 if __name__ == "__main__":

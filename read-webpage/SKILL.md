@@ -32,7 +32,7 @@ Fetch a webpage URL and return a clean plain-text preview, stripping all HTML, s
 
 The full text is saved to a `.txt` file named after the full URL and the current date/time (e.g. `zh.wikipedia.org_wiki_人工智能_variant=zh-hans_20260330_143022.txt`).
 
-If the page cannot be reached, report the HTTP error clearly.
+If the page cannot be reached, report the HTTP error clearly. If 0 lines are fetched, the page is JavaScript-rendered — suggest using `read-webpage-advanced` instead and do not save a file.
 
 ## Important
 

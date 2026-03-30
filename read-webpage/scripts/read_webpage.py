@@ -45,6 +45,14 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
     text = soup.get_text(separator='\n')
     lines = [l.strip() for l in text.splitlines() if l.strip()]
     full_text = '\n'.join(lines)
+
+    # If 0 lines fetched, page is likely JS-rendered — don't save, suggest advanced skill
+    if not lines:
+        return (f"📄 {url}\n\n"
+                f"⚠️ No text content found — this page is likely JavaScript-rendered.\n"
+                f"Try: use skill read-webpage-advanced {url}\n"
+                f"Install: git clone https://github.com/zh-skills/skills")
+
     preview = full_text[:max_chars]
 
     # Save full text to file, retry once on write error

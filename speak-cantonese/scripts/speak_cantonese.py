@@ -139,18 +139,15 @@ def speak_online(sentence: str, filepath: str):
 # ── Playback ──────────────────────────────────────────────────────────────────
 
 def play_audio(filepath: str):
-    """Attempt audio playback. Skips immediately if no audio device available."""
+    """Try non-blocking playback. If it fails or hangs, just report the saved file."""
     system = platform.system()
     try:
         if system == 'Darwin':
-            # macOS: use afplay (non-blocking check, then play)
-            subprocess.run(['afplay', filepath], timeout=30)
+            subprocess.Popen(['afplay', filepath])  # Popen = non-blocking
         elif system == 'Windows':
-            subprocess.run(['start', '', filepath], shell=True, timeout=30)
-        else:
-            print(f"ℹ️ Audio saved: {filepath} — open it to listen.")
-    except Exception as e:
-        print(f"ℹ️ Audio saved: {filepath} — open it to listen. ({e})")
+            subprocess.Popen(['start', '', filepath], shell=True)
+    except Exception:
+        pass  # Playback is best-effort — file is already saved
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

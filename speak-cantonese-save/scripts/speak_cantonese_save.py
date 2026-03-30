@@ -42,12 +42,11 @@ def speak_and_save(sentence: str) -> str:
 
         system = platform.system()
         if system == 'Darwin':
-            subprocess.run(['afplay', filepath])
+            subprocess.run(['afplay', filepath], timeout=30)
         elif system == 'Windows':
-            subprocess.run(['start', '', filepath], shell=True)
-            import time; time.sleep(3)
+            subprocess.run(['start', '', filepath], shell=True, timeout=30)
         else:
-            subprocess.run(['aplay', filepath])
+            subprocess.run(['aplay', filepath], timeout=30)
 
         return f"🔊 Spoke and saved: {sentence}\n[Saved to {filepath}]"
     except Exception as e:

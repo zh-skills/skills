@@ -35,4 +35,5 @@ Read a text file line by line, speak each line in Cantonese using edge-tts, and 
 - Run `scripts/speak_cantonese_file.py` only once per request
 - Mp3 files are saved in the current directory — no subdirectory is created
 - Do NOT retry if the script exits with code 0
+- Do NOT open, play, list, or search for the saved mp3 files — the task is complete when the script exits
 - If the file is not found, the script reports an error and exits

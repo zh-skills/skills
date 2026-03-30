@@ -45,7 +45,21 @@ def ensure_playwright():
         if answer in ('yes', 'y'):
             import subprocess
             print("   Installing playwright...")
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'playwright'])
+            # Use --user flag to handle externally-managed Python environments (e.g. Homebrew)
+            result = subprocess.run(
+                [sys.executable, '-m', 'pip', 'install', '--user', 'playwright'],
+                capture_output=True, text=True
+            )
+            if result.returncode != 0:
+                # Fallback: try without --user (works in venvs)
+                result = subprocess.run(
+                    [sys.executable, '-m', 'pip', 'install', 'playwright'],
+                    capture_output=True, text=True
+                )
+            if result.returncode != 0:
+                print(f"   ❌ Installation failed: {result.stderr.strip()}")
+                print("   Try manually: pip install --user playwright && playwright install chromium")
+                return False
             print("   Installing Chromium browser...")
             subprocess.check_call([sys.executable, '-m', 'playwright', 'install', 'chromium'])
             print("   ✅ Done. Re-run the script to continue.")

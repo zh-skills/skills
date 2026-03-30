@@ -51,13 +51,17 @@ def clean_line(line: str) -> str:
 
 def play(filepath: str):
     system = platform.system()
-    if system == 'Darwin':
-        subprocess.run(['afplay', filepath])
-    elif system == 'Windows':
-        subprocess.run(['start', '', filepath], shell=True)
-        import time; time.sleep(3)
-    else:
-        subprocess.run(['aplay', filepath])
+    try:
+        if system == 'Darwin':
+            subprocess.run(['afplay', filepath], timeout=30)
+        elif system == 'Windows':
+            subprocess.run(['start', '', filepath], shell=True, timeout=30)
+        else:
+            subprocess.run(['aplay', filepath], timeout=30)
+    except subprocess.TimeoutExpired:
+        pass
+    except Exception:
+        pass
 
 
 def speak_file(filepath: str) -> str:

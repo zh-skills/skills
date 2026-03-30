@@ -41,7 +41,7 @@ Convert a Cantonese sentence to speech using edge-tts and save the audio as an m
 
 ## Important
 
-Run `scripts/speak_cantonese.py` only once per request. Each run saves exactly one `.mp3` file. Before retrying, check whether an `.mp3` file was already saved — if it was, the run succeeded and no retry is needed.
+Run `scripts/speak_cantonese.py` only once per request. Each run saves exactly one `.mp3` file. The script does NOT play audio — it saves the file only. Do NOT retry if no audio is heard. Check for the saved `.mp3` file in `speeches/` to confirm success.
 
 ## Setup
 

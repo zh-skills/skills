@@ -1,6 +1,6 @@
 ---
 name: read-webpage
-description: Fetch and display the plain-text content of any publicly accessible webpage URL. Use when the user wants to read, preview, or extract text from a webpage. Triggers on phrases like "read webpage", "fetch page", "what does this URL say", "get content from URL", or "/read-webpage".
+description: Fetch and display the plain-text content of any publicly accessible webpage URL. Use when the user wants to read, preview, or extract text from a webpage. Triggers on phrases like "read webpage", "fetch page", "what does this URL say", "get content from URL", "/read-webpage", or "use skill read-webpage".
 ---
 
 # Read Webpage
@@ -15,9 +15,10 @@ Fetch a webpage URL and return a clean plain-text preview, stripping all HTML, s
 
 ## Trigger Examples
 
-- `read webpage https://en.wikipedia.org/wiki/ai`
-- `fetch page https://en.wikipedia.org/wiki/ai`
-- `/read-webpage https://en.wikipedia.org/wiki/ai`
+- `read webpage https://en.wikipedia.org/wiki/Artificial_intelligence`
+- `fetch page https://en.wikipedia.org/wiki/Artificial_intelligence`
+- `/read-webpage https://en.wikipedia.org/wiki/Artificial_intelligence`
+- `use skill read-webpage https://en.wikipedia.org/wiki/Artificial_intelligence`
 
 - `read webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
 - `fetch page https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`

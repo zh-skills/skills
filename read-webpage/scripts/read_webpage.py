@@ -6,7 +6,7 @@ Usage:
     python read_webpage.py <url>
 
 Examples:
-    python read_webpage.py https://en.wikipedia.org/wiki/ai
+    python read_webpage.py https://en.wikipedia.org/wiki/Artificial_intelligence
     python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
     python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
 """

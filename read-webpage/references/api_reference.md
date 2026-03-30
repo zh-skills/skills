@@ -25,7 +25,7 @@ def read_webpage(url: str, max_chars: int = 800) -> str:
 POST /api/read-webpage
 Content-Type: application/json
 
-{ "message": "read webpage https://en.wikipedia.org/wiki/ai" }
+{ "message": "read webpage https://en.wikipedia.org/wiki/Artificial_intelligence" }
 ```
 
 Response:

@@ -28,7 +28,7 @@ Here's what we added on top of that:
    Our script returns this instead:
 
    ```
-   📄 Preview of https://en.wikipedia.org/wiki/ai
+   📄 Preview of https://en.wikipedia.org/wiki/Artificial_intelligence
 
    Artificial intelligence
    From Wikipedia, the free encyclopedia

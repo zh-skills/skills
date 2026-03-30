@@ -5,8 +5,10 @@ read_webpage.py — Fetch and preview plain text from a webpage URL.
 Usage:
     python read_webpage.py <url>
 
-Example:
-    python read_webpage.py https://en.wikipedia.org/wiki/Hong_Kong
+Examples:
+    python read_webpage.py https://en.wikipedia.org/wiki/ai
+    python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
+    python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
 """
 
 import sys

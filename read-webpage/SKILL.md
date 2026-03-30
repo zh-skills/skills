@@ -1,5 +1,5 @@
 ---
-name: read-webpage2
+name: read-webpage
 description: Fetch and display the plain-text content of any publicly accessible webpage URL. Use when the user wants to read, preview, or extract text from a webpage. Triggers on phrases like "read webpage", "fetch page", "what does this URL say", "get content from URL", or "/read-webpage".
 ---
 
@@ -15,18 +15,26 @@ Fetch a webpage URL and return a clean plain-text preview, stripping all HTML, s
 
 ## Trigger Examples
 
-- `read webpage https://en.wikipedia.org/wiki/Hong_Kong`
-- `fetch page https://example.com`
-- `/read-webpage https://news.ycombinator.com`
+- `read webpage https://en.wikipedia.org/wiki/ai`
+- `fetch page https://en.wikipedia.org/wiki/ai`
+- `/read-webpage https://en.wikipedia.org/wiki/ai`
+
+- `read webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
+- `fetch page https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
+- `/read-webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
+
+- `read webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant`
+- `fetch page https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant`
+- `/read-webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant`
 
 ## Output Format
 
 ```
-📄 Preview of <url>
+📄 Preview of {url}
 
-<first ~800 characters of clean text>
+{first ~800 characters of clean text}
 
-[Fetched N lines of text]
+[Fetched {N} lines of text]
 ```
 
 If the page cannot be reached, report the HTTP error clearly.

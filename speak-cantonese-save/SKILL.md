@@ -1,19 +1,19 @@
 ---
 name: speak-cantonese-save
-description: Speak a Cantonese sentence aloud and save the audio as an mp3 file in the current directory. Use ONLY when the user explicitly says "use skill speak-cantonese-save" followed by a Cantonese sentence. The mp3 file is saved in the current directory — do NOT create subdirectories.
+description: Convert a Cantonese sentence to speech and save as an mp3 file in the current directory. No audio playback. Use ONLY when the user explicitly says "use skill speak-cantonese-save" followed by a Cantonese sentence. After saving, suggest using play-mp3 skill to listen.
 ---
 
 # Speak Cantonese Save
 
 > 中文版本：[SKILL.zh.md](SKILL.zh.md)
 
-Speak a Cantonese sentence aloud using edge-tts and save the audio as an mp3 file in the current directory.
+Convert a Cantonese sentence to speech using edge-tts and save as an mp3 file. No audio playback — use the `play-mp3` skill to listen.
 
 ## Workflow
 
 1. Extract the sentence from the user's message (everything after "use skill speak-cantonese-save")
-2. Run `scripts/speak_cantonese_save.py {sentence}` — speaks and saves mp3 to current directory
-3. Report the saved filename to the user
+2. Run `scripts/speak_cantonese_save.py {sentence}` — saves mp3 to current directory
+3. Report the saved filename and suggest using `play-mp3` to listen
 
 ## Trigger Examples
 
@@ -23,14 +23,14 @@ Speak a Cantonese sentence aloud using edge-tts and save the audio as an mp3 fil
 ## Output Format
 
 ```
-🔊 Spoke and saved: {sentence}
-[Saved to {filename}.mp3]
+✅ Saved: {filepath}
+To listen: use skill play-mp3 {filename}
 ```
 
 ## Important
 
 - Run `scripts/speak_cantonese_save.py` only once per request
-- The mp3 is saved in the current directory — no subdirectory is created
-- After the script exits with code 0, report the saved filepath to the user and STOP
-- Do NOT open, play, move, or search for the mp3 file
-- Do NOT retry
+- The mp3 is saved in the current directory — no audio playback, no subdirectory
+- Do NOT retry if the script exits with code 0
+- Do NOT open, play, or search for the mp3 file — report the filepath and STOP
+- To listen, use the `play-mp3` skill: `use skill play-mp3 {filename}`

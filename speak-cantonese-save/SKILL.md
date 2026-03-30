@@ -31,4 +31,6 @@ Speak a Cantonese sentence aloud using edge-tts and save the audio as an mp3 fil
 
 - Run `scripts/speak_cantonese_save.py` only once per request
 - The mp3 is saved in the current directory — no subdirectory is created
-- Do NOT retry if the script exits with code 0
+- After the script exits with code 0, report the saved filepath to the user and STOP
+- Do NOT open, play, move, or search for the mp3 file
+- Do NOT retry

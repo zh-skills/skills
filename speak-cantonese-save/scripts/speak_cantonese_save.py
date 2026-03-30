@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 speak_cantonese_save.py — Convert a Cantonese sentence to speech and save as mp3.
-Saves mp3 in current directory and plays it in the background.
+Saves mp3 in current directory. No audio playback — open the file to listen.
 
 Usage:
     python speak_cantonese_save.py {sentence}
@@ -15,7 +15,6 @@ import sys
 import asyncio
 import subprocess
 import os
-import platform
 from datetime import datetime
 
 
@@ -39,18 +38,6 @@ def speak_and_save(sentence: str) -> str:
         filename  = f"cantonese_{timestamp}.mp3"
         filepath  = os.path.join(os.getcwd(), filename)
         asyncio.run(edge_tts.Communicate(sentence, VOICE).save(filepath))
-
-        # Play in background — Popen returns immediately, script exits cleanly
-        system = platform.system()
-        if system == 'Darwin':
-            subprocess.Popen(['afplay', filepath],
-                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        elif system == 'Windows':
-            subprocess.Popen(['start', '', filepath], shell=True)
-        else:
-            subprocess.Popen(['aplay', filepath],
-                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
         return f"🔊 Spoke and saved: {sentence}\n[Saved to {filepath}]"
     except Exception as e:
         return f"❌ Failed: {e}"

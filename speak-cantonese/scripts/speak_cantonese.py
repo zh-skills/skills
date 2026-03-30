@@ -164,10 +164,10 @@ def speak_cantonese(sentence: str, mode: str = 'online', save_dir: str = '.') ->
         return f"❌ Both TTS methods failed.\nLast error: {error}\nTry: pip install edge-tts pygame"
 
     play_audio(filepath)
-    saved_name = os.path.basename(filepath)
+    saved_name = os.path.abspath(filepath)
     return (f"🔊 Cantonese audio ready: {sentence}\n"
             f"   Using: {method}\n\n"
-            f"[Saved to {SPEECHES}/{saved_name} — open to listen]")
+            f"[Saved to {saved_name} — open to listen]")
 
 
 # ── File mode ─────────────────────────────────────────────────────────────────
@@ -240,7 +240,8 @@ def speak_cantonese_file(filepath: str, mode: str = 'online', save_dir: str = '.
 
     return (f"🔊 Spoke {len(saved_files)}/{len(lines)} lines from: {filepath}\n"
             f"   Using: {method_used}\n\n"
-            f"[{combined_msg}]")
+            f"[{combined_msg}]\n"
+            f"[Individual files in: {os.path.abspath(os.path.join(save_dir, SPEECHES))}]")
 
 
 if __name__ == "__main__":

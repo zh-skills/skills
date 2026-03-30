@@ -34,6 +34,41 @@ VOICE    = 'zh-HK-HiuMaanNeural'   # edge-tts Cantonese HK voice
 SPEECHES = 'speeches'
 
 
+# ── Dependency check ──────────────────────────────────────────────────────────
+
+def ensure_online_deps():
+    """Check edge-tts and pygame. Offer to install if missing."""
+    missing = []
+    try:
+        import edge_tts  # noqa
+    except ImportError:
+        missing.append('edge-tts')
+    try:
+        import pygame  # noqa
+    except ImportError:
+        missing.append('pygame')
+    if not missing:
+        return True
+    print(f"⚠️ Missing packages for online mode: {', '.join(missing)}")
+    print(f"   Python: {sys.executable}")
+    answer = input("   Install now? (yes/no): ").strip().lower()
+    if answer in ('yes', 'y'):
+        import subprocess
+        for pkg in missing:
+            result = subprocess.run(
+                [sys.executable, '-m', 'pip', 'install', '--user', pkg],
+                capture_output=True, text=True
+            )
+            if result.returncode != 0:
+                subprocess.run([sys.executable, '-m', 'pip', 'install', pkg])
+        print("   ✅ Done. Re-run the script to continue.")
+        return False
+    else:
+        print(f"   Skipped. Run manually: pip install {' '.join(missing)}")
+        return False
+    return True
+
+
 # ── System TTS (local) ────────────────────────────────────────────────────────
 
 def speak_local(sentence: str, filepath: str):
@@ -98,10 +133,13 @@ async def _synthesize_edge(text: str, output: str):
 def speak_online(sentence: str, filepath: str):
     """Try edge-tts. Returns (success, method, error, filepath)."""
     try:
+        import edge_tts  # noqa
+    except ImportError:
+        if not ensure_online_deps():
+            return False, "", "edge-tts not installed. Re-run after installation.", filepath
+    try:
         asyncio.run(_synthesize_edge(sentence, filepath))
         return True, "edge-tts (online, Microsoft zh-HK-HiuMaanNeural)", "", filepath
-    except ImportError:
-        return False, "", "edge-tts not installed. Run: pip install edge-tts", filepath
     except Exception as e:
         return False, "", str(e), filepath
 
@@ -200,19 +238,23 @@ def speak_cantonese_file(filepath: str, mode: str = 'online', save_dir: str = '.
 
         if success:
             method_used = method
-            play_audio(fp)
+            # Skip pygame playback if macOS say already played the audio
+            if 'macOS' not in method:
+                play_audio(fp)
             saved_files.append(os.path.basename(fp))
         else:
             print(f"   ⚠️ Skipped (TTS failed): {error}")
 
-    # Synthesise combined mp3
+    # Synthesise combined mp3 (only if edge-tts available)
     combined_name = f"cantonese_{timestamp}_combined.mp3"
     combined_path = os.path.join(save_dir, SPEECHES, combined_name)
     try:
-        import asyncio as _asyncio
+        import edge_tts as _edge_tts_check  # noqa
         full_text = "。".join(lines)
-        _asyncio.run(_synthesize_edge(full_text, combined_path))
+        asyncio.run(_synthesize_edge(full_text, combined_path))
         combined_msg = f"Combined: {SPEECHES}/{combined_name}"
+    except ImportError:
+        combined_msg = "Combined mp3 skipped (edge-tts not installed). Run: pip install edge-tts"
     except Exception as e:
         combined_msg = f"Combined file failed: {e}"
 

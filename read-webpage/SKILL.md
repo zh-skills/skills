@@ -20,6 +20,8 @@ Fetch a webpage URL and return a clean plain-text preview, stripping all HTML, s
 - `use skill read-webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
 - `use skill read-webpage https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant`
 
+If the page returns very few lines (e.g. `https://quotes.toscrape.com/js/`), it is JS-rendered — use `read-webpage-advanced` instead.
+
 ## Output Format
 
 ```

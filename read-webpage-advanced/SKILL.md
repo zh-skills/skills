@@ -25,7 +25,7 @@ Run `scripts/read_webpage_advanced.py` only once per request. Each run saves exa
 
 ## Trigger Examples
 
-- `use skill read-webpage-advanced https://www.cityu.edu.hk/fo/htm/tpg_fees.htm`
+- `use skill read-webpage-advanced https://quotes.toscrape.com/js/`
 - `use skill read-webpage-advanced https://en.wikipedia.org/wiki/Artificial_intelligence`
 - `use skill read-webpage-advanced https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans`
 - `use skill read-webpage-advanced https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant`

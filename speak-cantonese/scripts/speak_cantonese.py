@@ -37,36 +37,28 @@ SPEECHES = 'speeches'
 # ── Dependency check ──────────────────────────────────────────────────────────
 
 def ensure_online_deps():
-    """Check edge-tts and pygame. Offer to install if missing."""
-    missing = []
+    """Check edge-tts. Offer to install if missing."""
     try:
         import edge_tts  # noqa
-    except ImportError:
-        missing.append('edge-tts')
-    try:
-        import pygame  # noqa
-    except ImportError:
-        missing.append('pygame')
-    if not missing:
         return True
-    print(f"⚠️ Missing packages for online mode: {', '.join(missing)}")
+    except ImportError:
+        pass
+    print("⚠️ Missing package: edge-tts")
     print(f"   Python: {sys.executable}")
     answer = input("   Install now? (yes/no): ").strip().lower()
     if answer in ('yes', 'y'):
-        import subprocess
-        for pkg in missing:
-            result = subprocess.run(
-                [sys.executable, '-m', 'pip', 'install', '--user', pkg],
-                capture_output=True, text=True
-            )
-            if result.returncode != 0:
-                subprocess.run([sys.executable, '-m', 'pip', 'install', pkg])
+        import subprocess as _sp
+        result = _sp.run(
+            [sys.executable, '-m', 'pip', 'install', '--user', 'edge-tts'],
+            capture_output=True, text=True
+        )
+        if result.returncode != 0:
+            _sp.run([sys.executable, '-m', 'pip', 'install', 'edge-tts'])
         print("   ✅ Done. Re-run the script to continue.")
         return False
     else:
-        print(f"   Skipped. Run manually: pip install {' '.join(missing)}")
+        print("   Skipped. Run manually: pip install edge-tts")
         return False
-    return True
 
 
 # ── System TTS (local) ────────────────────────────────────────────────────────
@@ -147,16 +139,18 @@ def speak_online(sentence: str, filepath: str):
 # ── Playback ──────────────────────────────────────────────────────────────────
 
 def play_audio(filepath: str):
+    """Attempt audio playback. Skips immediately if no audio device available."""
+    system = platform.system()
     try:
-        import pygame
-        pygame.mixer.init()
-        pygame.mixer.music.load(filepath)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
-        pygame.mixer.quit()
+        if system == 'Darwin':
+            # macOS: use afplay (non-blocking check, then play)
+            subprocess.run(['afplay', filepath], timeout=30)
+        elif system == 'Windows':
+            subprocess.run(['start', '', filepath], shell=True, timeout=30)
+        else:
+            print(f"ℹ️ Audio saved: {filepath} — open it to listen.")
     except Exception as e:
-        print(f"⚠️ Playback failed: {e}")
+        print(f"ℹ️ Audio saved: {filepath} — open it to listen. ({e})")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

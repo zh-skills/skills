@@ -19,7 +19,7 @@ Speak a Cantonese sentence aloud using edge-tts (Microsoft zh-HK-HiuMaanNeural v
 ## Trigger Examples
 
 - `use skill speak-cantonese 各個國家有各個國家嘅國歌`
-- `use skill speak-cantonese 香港係一個國際城市`
+- `use skill speak-cantonese 一蚊一隻雞，一蚊一隻龜`
 
 ## Output Format
 

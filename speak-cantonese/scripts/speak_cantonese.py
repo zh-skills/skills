@@ -37,28 +37,28 @@ SPEECHES = 'speeches'
 # ── Dependency check ──────────────────────────────────────────────────────────
 
 def ensure_online_deps():
-    """Check edge-tts. Offer to install if missing."""
+    """Check edge-tts. Auto-install silently if missing."""
     try:
         import edge_tts  # noqa
         return True
     except ImportError:
         pass
-    print("⚠️ Missing package: edge-tts")
-    print(f"   Python: {sys.executable}")
-    answer = input("   Install now? (yes/no): ").strip().lower()
-    if answer in ('yes', 'y'):
-        import subprocess as _sp
-        result = _sp.run(
-            [sys.executable, '-m', 'pip', 'install', '--user', 'edge-tts'],
+    print("⚠️ edge-tts not found. Installing automatically...")
+    result = subprocess.run(
+        [sys.executable, '-m', 'pip', 'install', '--user', 'edge-tts'],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        result = subprocess.run(
+            [sys.executable, '-m', 'pip', 'install', 'edge-tts'],
             capture_output=True, text=True
         )
-        if result.returncode != 0:
-            _sp.run([sys.executable, '-m', 'pip', 'install', 'edge-tts'])
-        print("   ✅ Done. Re-run the script to continue.")
-        return False
-    else:
-        print("   Skipped. Run manually: pip install edge-tts")
-        return False
+    if result.returncode == 0:
+        print("   ✅ edge-tts installed. Continuing...")
+        return True
+    print(f"   ❌ Installation failed: {result.stderr.strip()}")
+    print("   Run manually: pip install edge-tts")
+    return False
 
 
 # ── System TTS (local) ────────────────────────────────────────────────────────

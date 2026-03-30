@@ -1,45 +1,55 @@
 #!/usr/bin/env python3
 """
-read_webpage.py — Fetch and preview plain text from a webpage URL.
-Saves full text to a .txt file named after the webpage + date + time.
+read_webpage_advanced.py — Fetch plain text from any webpage, including JS-rendered pages.
+Uses Playwright headless browser. Saves full text to a .txt file named after the URL + date/time.
+
+Setup (first time only):
+    pip install playwright
+    playwright install chromium
 
 Usage:
-    python read_webpage.py <url>
+    python read_webpage_advanced.py <url>
 
 Examples:
-    python read_webpage.py https://en.wikipedia.org/wiki/Artificial_intelligence
-    python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
-    python read_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
+    python read_webpage_advanced.py https://www.cityu.edu.hk/fo/htm/tpg_fees.htm
+    python read_webpage_advanced.py https://en.wikipedia.org/wiki/Artificial_intelligence
+    python read_webpage_advanced.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
+    python read_webpage_advanced.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
 """
 
 import sys
 import re
 import os
 from datetime import datetime
-import requests
-from bs4 import BeautifulSoup
 
 
 def make_filename(url: str) -> str:
-    """Derive a safe filename from the full URL + current date + time."""
-    # Strip scheme (https://)
+    """Derive a safe filename from the full URL + current date/time."""
     name = re.sub(r'^https?://', '', url)
-    # Replace invalid filename characters with underscores
     name = re.sub(r'[/:?&]', '_', name)
-    # Collapse multiple underscores
     name = re.sub(r'_+', '_', name).strip('_')
-    # Limit length
     name = name[:80]
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     return f"{name}_{timestamp}.txt"
 
 
-def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
-    headers = {'User-Agent': 'Mozilla/5.0 (compatible; SkillBot/1.0)'}
-    resp = requests.get(url, headers=headers, timeout=15)
-    resp.raise_for_status()
-    resp.encoding = resp.apparent_encoding  # fix garbled text / UTF-8 BOM
-    soup = BeautifulSoup(resp.text, 'html.parser')
+def read_webpage_advanced(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        return "❌ Playwright not installed. Run: pip install playwright && playwright install chromium"
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url, wait_until='networkidle', timeout=30000)
+        # Wait for body content to load
+        page.wait_for_selector('body', timeout=10000)
+        html = page.content()
+        browser.close()
+
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html.lstrip('\ufeff'), 'html.parser')
     for tag in soup(['script', 'style', 'noscript', 'nav', 'footer']):
         tag.decompose()
     text = soup.get_text(separator='\n')
@@ -58,7 +68,7 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
                 f.write(f"Lines: {len(lines)}\n")
                 f.write('─' * 60 + '\n\n')
                 f.write(full_text)
-            break  # success — do not retry
+            break
         except OSError as e:
             if attempt == 0:
                 print(f"⚠️ Write error (attempt 1): {e} — retrying...")
@@ -73,6 +83,6 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: read_webpage.py <url>")
+        print("Usage: read_webpage_advanced.py <url>")
         sys.exit(1)
-    print(read_webpage(sys.argv[1]))
+    print(read_webpage_advanced(sys.argv[1]))

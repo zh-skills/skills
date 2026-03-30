@@ -20,6 +20,44 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def detect_lang(text: str) -> str:
+    """Detect language from user input: 'zh-hans', 'zh-hant', or 'en'."""
+    # Known Simplified-only characters
+    simplified = set('简体网页读书学习时间问题')
+    # Known Traditional-only characters
+    traditional = set('繁體網頁讀書學習時間問題')
+    if not re.search(r'[\u4e00-\u9fff]', text):
+        return 'en'
+    simp_count = sum(1 for c in text if c in simplified)
+    trad_count = sum(1 for c in text if c in traditional)
+    return 'zh-hant' if trad_count > simp_count else 'zh-hans'
+
+
+MSGS = {
+    'en': {
+        'preview':   '📄 Preview of {url}',
+        'fetched':   '[Fetched {n} lines of text • {saved}]',
+        'saved':     'Saved to {filename}',
+        'save_fail': 'File save failed',
+        'js_warn':   '⚠️ Only {n} line(s) found — this page is likely JavaScript-rendered.\nTry: use skill read-webpage-advanced {url}\nInstall: git clone https://github.com/zh-skills/skills',
+    },
+    'zh-hans': {
+        'preview':   '📄 网页预览：{url}',
+        'fetched':   '【已读取 {n} 行 • {saved}】',
+        'saved':     '已保存至 {filename}',
+        'save_fail': '文件保存失败',
+        'js_warn':   '⚠️ 仅读取到 {n} 行——此网页可能使用 JavaScript 动态加载内容。\n建议改用：use skill read-webpage-advanced {url}\n安装：git clone https://github.com/zh-skills/skills',
+    },
+    'zh-hant': {
+        'preview':   '📄 網頁預覽：{url}',
+        'fetched':   '【已讀取 {n} 行 • {saved}】',
+        'saved':     '已儲存至 {filename}',
+        'save_fail': '檔案儲存失敗',
+        'js_warn':   '⚠️ 僅讀取到 {n} 行——此網頁可能使用 JavaScript 動態載入內容。\n建議改用：use skill read-webpage-advanced {url}\n安裝：git clone https://github.com/zh-skills/skills',
+    },
+}
+
+
 def make_filename(url: str) -> str:
     """Derive a safe filename from the full URL + current date + time."""
     # Strip scheme (https://)
@@ -34,7 +72,8 @@ def make_filename(url: str) -> str:
     return f"{name}_{timestamp}.txt"
 
 
-def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
+def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.', lang: str = 'en') -> str:
+    m = MSGS[lang if lang in MSGS else 'en']
     headers = {'User-Agent': 'Mozilla/5.0 (compatible; SkillBot/1.0)'}
     resp = requests.get(url, headers=headers, timeout=15)
     resp.raise_for_status()
@@ -48,10 +87,7 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
 
     # If very few lines fetched, page is likely JS-rendered — don't save, suggest advanced skill
     if len(lines) < 5:
-        return (f"📄 {url}\n\n"
-                f"⚠️ Only {len(lines)} line(s) found — this page is likely JavaScript-rendered.\n"
-                f"Try: use skill read-webpage-advanced {url}\n"
-                f"Install: git clone https://github.com/zh-skills/skills")
+        return m['js_warn'].format(n=len(lines), url=url)
 
     preview = full_text[:max_chars]
 
@@ -74,13 +110,15 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
                 print(f"❌ Write failed after retry: {e}")
                 filename = None
 
-    saved_msg = f"Saved to {filename}" if filename else "File save failed"
-    return (f"📄 Preview of {url}\n\n{preview}\n\n"
-            f"[Fetched {len(lines)} lines of text • {saved_msg}]")
+    saved_msg = m['saved'].format(filename=filename) if filename else m['save_fail']
+    return (f"{m['preview'].format(url=url)}\n\n{preview}\n\n"
+            f"{m['fetched'].format(n=len(lines), saved=saved_msg)}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: read_webpage.py <url>")
         sys.exit(1)
-    print(read_webpage(sys.argv[1]))
+    user_input = ' '.join(sys.argv)
+    lang = detect_lang(user_input)
+    print(read_webpage(sys.argv[1], lang=lang))

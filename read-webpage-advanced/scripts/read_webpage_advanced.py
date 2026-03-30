@@ -33,7 +33,30 @@ def make_filename(url: str) -> str:
     return f"{name}_{timestamp}.txt"
 
 
+def ensure_playwright():
+    """Check if playwright is installed. If not, offer to install it automatically."""
+    try:
+        from playwright.sync_api import sync_playwright
+        return True
+    except ImportError:
+        print("⚠️ Playwright is not installed in your current Python environment.")
+        print(f"   Python: {sys.executable}")
+        answer = input("   Install it now? (yes/no): ").strip().lower()
+        if answer in ('yes', 'y'):
+            import subprocess
+            print("   Installing playwright...")
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'playwright'])
+            print("   Installing Chromium browser...")
+            subprocess.check_call([sys.executable, '-m', 'playwright', 'install', 'chromium'])
+            print("   ✅ Done. Re-run the script to continue.")
+        else:
+            print("   Skipped. Run manually: pip install playwright && playwright install chromium")
+        return False
+
+
 def read_webpage_advanced(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
+    if not ensure_playwright():
+        return "❌ Playwright not installed. Re-run the script after installation."
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:

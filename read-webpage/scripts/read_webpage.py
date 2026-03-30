@@ -46,10 +46,10 @@ def read_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
     lines = [l.strip() for l in text.splitlines() if l.strip()]
     full_text = '\n'.join(lines)
 
-    # If 0 lines fetched, page is likely JS-rendered — don't save, suggest advanced skill
-    if not lines:
+    # If very few lines fetched, page is likely JS-rendered — don't save, suggest advanced skill
+    if len(lines) < 5:
         return (f"📄 {url}\n\n"
-                f"⚠️ No text content found — this page is likely JavaScript-rendered.\n"
+                f"⚠️ Only {len(lines)} line(s) found — this page is likely JavaScript-rendered.\n"
                 f"Try: use skill read-webpage-advanced {url}\n"
                 f"Install: git clone https://github.com/zh-skills/skills")
 

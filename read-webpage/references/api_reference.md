@@ -19,13 +19,13 @@ def read_webpage(url: str, max_chars: int = 800) -> str:
     return f"📄 Preview of {url}\n\n{preview}\n\n[Fetched {len(lines)} lines of text]"
 ```
 
-## Flask API Endpoint (ai06_server.py)
+## Flask API Endpoint
 
 ```
 POST /api/read-webpage
 Content-Type: application/json
 
-{ "message": "read webpage https://en.wikipedia.org/wiki/Artificial_intelligence" }
+{ "message": "use skill read-webpage https://en.wikipedia.org/wiki/Artificial_intelligence" }
 ```
 
 Response:
@@ -43,7 +43,14 @@ Install:
 pip install requests beautifulsoup4
 ```
 
-## Limitations
+## Saved Output File
+
+The full page text is saved to a `.txt` file in the current directory:
+- Filename format: `{page_name}_{YYYYMMDD_HHMMSS}.txt`
+- Example: `Artificial_intelligence_20260330_143022.txt`
+- File contains: URL, fetch timestamp, line count, and full plain text
+
+
 
 - JavaScript-rendered pages may return limited content (static HTML only)
 - Requires public URL — no login-protected pages

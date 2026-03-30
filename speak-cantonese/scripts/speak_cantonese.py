@@ -44,20 +44,14 @@ def ensure_online_deps():
     except ImportError:
         pass
     print("⚠️ edge-tts not found. Installing automatically...")
-    # Install into the exact Python running this script (not --user which may go elsewhere)
     result = subprocess.run(
         [sys.executable, '-m', 'pip', 'install', 'edge-tts'],
         capture_output=True, text=True
     )
     if result.returncode == 0:
-        print("   ✅ edge-tts installed. Continuing...")
-        # Force reimport
-        import importlib
-        try:
-            import edge_tts  # noqa
-            return True
-        except ImportError:
-            pass
+        print("   ✅ edge-tts installed. Re-running script...")
+        # Restart the script so the new package is picked up cleanly
+        os.execv(sys.executable, [sys.executable] + sys.argv)
     print(f"   ❌ Installation failed: {result.stderr.strip()[:200]}")
     return False
 

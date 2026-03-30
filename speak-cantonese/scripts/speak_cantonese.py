@@ -141,7 +141,10 @@ def play_audio(filepath: str):
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-def speak_cantonese(sentence: str, mode: str = 'online', save_dir: str = '.') -> str:
+def speak_cantonese(sentence: str, mode: str = 'online', save_dir: str = None) -> str:
+    # Save to user's home speeches folder so it's always accessible
+    if save_dir is None:
+        save_dir = os.path.expanduser('~')
     os.makedirs(os.path.join(save_dir, SPEECHES), exist_ok=True)
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename  = f"cantonese_{timestamp}.mp3"
@@ -183,8 +186,10 @@ def clean_line(line: str) -> str:
     return line.strip()
 
 
-def speak_cantonese_file(filepath: str, mode: str = 'online', save_dir: str = '.') -> str:
+def speak_cantonese_file(filepath: str, mode: str = 'online', save_dir: str = None) -> str:
     """Read a text file line by line and speak each line."""
+    if save_dir is None:
+        save_dir = os.path.expanduser('~')
     if not os.path.isfile(filepath):
         return f"❌ File not found: {filepath}"
 

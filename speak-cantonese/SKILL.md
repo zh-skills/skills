@@ -7,7 +7,7 @@ description: Speak a Cantonese sentence aloud using text-to-speech. Use ONLY whe
 
 > 中文版本：[SKILL.zh.md](SKILL.zh.md)
 
-Speak a Cantonese sentence aloud using edge-tts (online) or macOS system voice (local).
+Speak a Cantonese sentence aloud using edge-tts (Microsoft zh-HK-HiuMaanNeural voice).
 
 ## Workflow
 
@@ -18,24 +18,13 @@ Speak a Cantonese sentence aloud using edge-tts (online) or macOS system voice (
 
 ## Trigger Examples
 
-- `use skill speak-cantonese 各個國家有各個國家嘅國歌` — default (online, edge-tts)
-- `use skill speak-cantonese online 各個國家有各個國家嘅國歌` — explicitly use edge-tts
-- `use skill speak-cantonese local 各個國家有各個國家嘅國歌` — use macOS system voice (Sinji)
-
-## Modes
-
-- `online` (default) — uses edge-tts (Microsoft zh-HK-HiuMaanNeural, free, requires internet)
-- `local` — uses macOS `say` command with Sinji (Cantonese HK) voice
-- If the chosen mode fails, automatically falls back to the other mode
+- `use skill speak-cantonese 各個國家有各個國家嘅國歌`
+- `use skill speak-cantonese 香港係一個國際城市`
 
 ## Output Format
 
 ```
-🔊 Spoke (online): {sentence}
-```
-or
-```
-🔊 Spoke (local, Sinji): {sentence}
+🔊 Spoke: {sentence}
 ```
 
 ## Important
@@ -48,10 +37,8 @@ or
 ## Setup
 
 ```bash
-pip install edge-tts    # for online mode (default, auto-installed if missing)
+pip install edge-tts    # auto-installed if missing
 ```
-
-macOS local mode uses the built-in `say` command — no install needed. Install Sinji (Cantonese HK) voice in System Settings → Accessibility → Spoken Content.
 
 ## Reference
 

@@ -258,10 +258,12 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     mode = 'online'
 
-    # Extract mode if specified
-    if args[0].lower() in ('online', 'local'):
-        mode = args[0].lower()
-        args = args[1:]
+    # Extract mode keyword from anywhere in args
+    mode_args = [a for a in args if a.lower() in ('online', 'local')]
+    other_args = [a for a in args if a.lower() not in ('online', 'local')]
+    if mode_args:
+        mode = mode_args[0].lower()
+    args = other_args
 
     if not args:
         print("Please provide a sentence or 'file {filepath}'.")

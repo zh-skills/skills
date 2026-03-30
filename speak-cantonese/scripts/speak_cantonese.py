@@ -139,15 +139,8 @@ def speak_online(sentence: str, filepath: str):
 # ── Playback ──────────────────────────────────────────────────────────────────
 
 def play_audio(filepath: str):
-    """Try non-blocking playback. If it fails or hangs, just report the saved file."""
-    system = platform.system()
-    try:
-        if system == 'Darwin':
-            subprocess.Popen(['afplay', filepath])  # Popen = non-blocking
-        elif system == 'Windows':
-            subprocess.Popen(['start', '', filepath], shell=True)
-    except Exception:
-        pass  # Playback is best-effort — file is already saved
+    """No-op — audio is saved to file. User opens it to listen."""
+    pass
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -176,9 +169,9 @@ def speak_cantonese(sentence: str, mode: str = 'online', save_dir: str = '.') ->
 
     play_audio(filepath)
     saved_name = os.path.basename(filepath)
-    return (f"🔊 Speaking: {sentence}\n"
+    return (f"🔊 Cantonese audio ready: {sentence}\n"
             f"   Using: {method}\n\n"
-            f"[Saved to {SPEECHES}/{saved_name}]")
+            f"[Saved to {SPEECHES}/{saved_name} — open to listen]")
 
 
 # ── File mode ─────────────────────────────────────────────────────────────────

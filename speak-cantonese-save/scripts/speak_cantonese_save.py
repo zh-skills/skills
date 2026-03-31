@@ -35,7 +35,7 @@ def speak_and_save(sentence: str) -> str:
             return "❌ edge-tts install failed. Run: pip install edge-tts"
 
     try:
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
         filename  = f"cantonese_{timestamp}.mp3"
         filepath  = os.path.join(os.getcwd(), filename)
         asyncio.run(edge_tts.Communicate(sentence, VOICE).save(filepath))

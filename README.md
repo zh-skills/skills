@@ -11,7 +11,7 @@ A collection of AI agent skills for Chinese and English users. Install with one 
 | Skill | Description | Install |
 |-------|-------------|---------|
 | [read-webpage](read-webpage/) | Fetch plain text from any static webpage. Supports English, Simplified and Traditional Chinese output. | `npx skills add zh-skills/skills@read-webpage` |
-| [read-webpage-advanced](read-webpage-advanced/) | Fetch plain text from JavaScript-rendered pages using a headless browser (Playwright). | `npx skills add zh-skills/skills@read-webpage-advanced` |
+| [read-dynamic-webpage](read-dynamic-webpage/) | Fetch plain text from JavaScript-rendered pages using a headless browser (Playwright). | `npx skills add zh-skills/skills@read-dynamic-webpage` |
 | [speak-cantonese](speak-cantonese/) | Convert a Cantonese sentence or text file to speech. Supports online (edge-tts) and local (macOS/Windows) modes. Includes Cantonese tongue-twister practice files. | `npx skills add zh-skills/skills@speak-cantonese` |
 
 ---
@@ -42,10 +42,10 @@ use skill speak-cantonese file skills/speak-cantonese/assets/cantonese-challenge
 ## When to Use Which Skill
 
 - **read-webpage** — fast, no setup, works on most pages (Wikipedia, news, university sites)
-- **read-webpage-advanced** — slower, requires Playwright, handles JavaScript-rendered pages
+- **read-dynamic-webpage** — slower, requires Playwright, handles JavaScript-rendered pages
 - **speak-cantonese** — text-to-speech for Cantonese, online (edge-tts) or local (macOS/Windows) mode
 
-If `read-webpage` returns fewer than 5 lines, the page is JS-rendered — switch to `read-webpage-advanced`.
+If `read-webpage` returns fewer than 5 lines, the page is JS-rendered — switch to `read-dynamic-webpage`.
 
 ---
 
@@ -55,7 +55,7 @@ If `read-webpage` returns fewer than 5 lines, the page is JS-rendered — switch
 # read-webpage
 pip install requests beautifulsoup4
 
-# read-webpage-advanced
+# read-dynamic-webpage
 pip install playwright beautifulsoup4
 playwright install chromium
 

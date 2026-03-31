@@ -1,4 +1,4 @@
-# API Reference — read-webpage-advanced
+# API Reference — read-dynamic-webpage
 
 ## Python Implementation
 
@@ -6,7 +6,7 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
-def read_webpage_advanced(url: str, max_chars: int = 800) -> str:
+def read_dynamic_webpage(url: str, max_chars: int = 800) -> str:
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()

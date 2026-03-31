@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-read_webpage_advanced.py — Fetch plain text from any webpage, including JS-rendered pages.
+read_dynamic_webpage.py — Fetch plain text from any webpage, including JS-rendered pages.
 Uses Playwright headless browser. Saves full text to a .txt file named after the URL + date/time.
 
 Setup (first time only):
@@ -8,13 +8,15 @@ Setup (first time only):
     playwright install chromium
 
 Usage:
-    python read_webpage_advanced.py <url>
+    python read_dynamic_webpage.py <url>
 
 Examples:
-    python read_webpage_advanced.py https://www.cityu.edu.hk/fo/htm/tpg_fees.htm
-    python read_webpage_advanced.py https://en.wikipedia.org/wiki/Artificial_intelligence
-    python read_webpage_advanced.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
-    python read_webpage_advanced.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
+    python read_dynamic_webpage.py https://quotes.toscrape.com/js/
+    python read_dynamic_webpage.py https://en.wikipedia.org/wiki/Artificial_intelligence
+    python read_dynamic_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
+    python read_dynamic_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
+    python read_dynamic_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hant
+    python read_dynamic_webpage.py https://zh.wikipedia.org/wiki/人工智能?variant=zh-hans
 """
 
 import sys
@@ -68,7 +70,7 @@ def ensure_playwright():
         return False
 
 
-def read_webpage_advanced(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
+def read_dynamic_webpage(url: str, max_chars: int = 800, save_dir: str = '.') -> str:
     if not ensure_playwright():
         return "❌ Playwright not installed. Re-run the script after installation."
     try:
@@ -120,6 +122,6 @@ def read_webpage_advanced(url: str, max_chars: int = 800, save_dir: str = '.') -
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: read_webpage_advanced.py <url>")
+        print("Usage: read_dynamic_webpage.py <url>")
         sys.exit(1)
-    print(read_webpage_advanced(sys.argv[1]))
+    print(read_dynamic_webpage(sys.argv[1]))

@@ -39,21 +39,21 @@ MSGS = {
         'fetched':   '[Fetched {n} lines of text • {saved}]',
         'saved':     'Saved to {filename}',
         'save_fail': 'File save failed',
-        'js_warn':   '⚠️ Only {n} line(s) found — this page is likely JavaScript-rendered.\nTry: use skill read-webpage-advanced {url}\nInstall: git clone https://github.com/zh-skills/skills',
+        'js_warn':   '⚠️ Only {n} line(s) found — this page is likely JavaScript-rendered.\nTry: use skill read-dynamic-webpage {url}\nInstall: git clone https://github.com/zh-skills/skills',
     },
     'zh-hans': {
         'preview':   '📄 网页预览：{url}',
         'fetched':   '【已读取 {n} 行 • {saved}】',
         'saved':     '已保存至 {filename}',
         'save_fail': '文件保存失败',
-        'js_warn':   '⚠️ 仅读取到 {n} 行——此网页可能使用 JavaScript 动态加载内容。\n建议改用：use skill read-webpage-advanced {url}\n安装：git clone https://github.com/zh-skills/skills',
+        'js_warn':   '⚠️ 仅读取到 {n} 行——此网页可能使用 JavaScript 动态加载内容。\n建议改用：use skill read-dynamic-webpage {url}\n安装：git clone https://github.com/zh-skills/skills',
     },
     'zh-hant': {
         'preview':   '📄 網頁預覽：{url}',
         'fetched':   '【已讀取 {n} 行 • {saved}】',
         'saved':     '已儲存至 {filename}',
         'save_fail': '檔案儲存失敗',
-        'js_warn':   '⚠️ 僅讀取到 {n} 行——此網頁可能使用 JavaScript 動態載入內容。\n建議改用：use skill read-webpage-advanced {url}\n安裝：git clone https://github.com/zh-skills/skills',
+        'js_warn':   '⚠️ 僅讀取到 {n} 行——此網頁可能使用 JavaScript 動態載入內容。\n建議改用：use skill read-dynamic-webpage {url}\n安裝：git clone https://github.com/zh-skills/skills',
     },
 }
 

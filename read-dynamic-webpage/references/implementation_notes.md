@@ -1,4 +1,4 @@
-# Implementation Notes — read-webpage-advanced
+# Implementation Notes — read-dynamic-webpage
 
 ## Why Playwright Instead of requests + BeautifulSoup
 
@@ -8,7 +8,7 @@ Playwright launches a real headless Chromium browser, waits for the JavaScript t
 
 ## Key Differences vs read-webpage
 
-| Feature | read-webpage | read-webpage-advanced |
+| Feature | read-webpage | read-dynamic-webpage |
 |---------|-------------|----------------------|
 | Static HTML pages | ✅ Fast | ✅ Works |
 | JS-rendered pages | ❌ Returns 0 lines | ✅ Works |
@@ -19,7 +19,7 @@ Playwright launches a real headless Chromium browser, waits for the JavaScript t
 ## When to Use Each
 
 - Start with `read-webpage` — it's faster and simpler
-- If it returns 0 lines or very little content, switch to `read-webpage-advanced`
+- If it returns 0 lines or very little content, switch to `read-dynamic-webpage`
 
 ## Dependencies
 

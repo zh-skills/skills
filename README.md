@@ -70,7 +70,7 @@ pip install requests beautifulsoup4
 
 # read-dynamic-webpage
 pip install playwright beautifulsoup4
-playwright install chromium
+python -m playwright install chromium
 
 # speak-cantonese, speak-cantonese-save, text-to-speech-cantonese, speak-cantonese-file
 pip install edge-tts

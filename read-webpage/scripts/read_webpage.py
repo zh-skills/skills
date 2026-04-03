@@ -58,6 +58,12 @@ MSGS = {
 }
 
 
+def extract_url(message: str):
+    """Extract the first URL from a message string."""
+    m = re.search(r'https?://[^\s]+', message)
+    return m.group(0) if m else None
+
+
 def make_filename(url: str) -> str:
     """Derive a safe filename from the full URL + current date + time."""
     # Strip scheme (https://)

@@ -51,7 +51,7 @@ If the page cannot be reached, report the HTTP error clearly.
 Install Playwright and its browser on first use:
 ```bash
 pip install playwright
-playwright install chromium
+python -m playwright install chromium
 ```
 
 ## Reference
